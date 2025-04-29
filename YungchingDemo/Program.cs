@@ -3,6 +3,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 
+builder.Services.AddControllers(); //支援webapi controllers
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -19,7 +21,9 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthorization();
-
+//支援webapi controllers
+app.MapControllers();
+//支援MVC Razor Pages
 app.MapRazorPages();
 
 app.Run();

@@ -15,7 +15,7 @@
         /// <summary> 房屋坪數 </summary>
         public decimal Square { get; set; } = 0;
         /// <summary> 公設比 </summary>
-        public string PublicRatio { get; set; } = "";
+        public int PublicRatio { get; set; } = 0;
         /// <summary> 是否附停車位 </summary>
         public string HaveSpace { get; set; } = "";
         /// <summary> 備註 </summary>

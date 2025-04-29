@@ -5,7 +5,6 @@ namespace YungchingDemo.Pages
 {
     public class MaintainModel : PageModel
     {
-        public ResultModel _Result = new ResultModel();
         private readonly ILogger<MaintainModel> _logger;
 
         public MaintainModel(ILogger<MaintainModel> logger)
