@@ -2,7 +2,7 @@
 {
     public class ResultModel
     {
-        /// <summary> 專案案號 </summary>
+        /// <summary> 專案編號 </summary>
         public string ProjectID { get; set; } = "";
         /// <summary> 專案名稱 </summary>
         public string ProjectName { get; set; } = "";

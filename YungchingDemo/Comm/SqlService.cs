@@ -5,27 +5,45 @@ namespace YungchingDemo.Comm
 {
     public class SqlService
     {
-        //從appsettings.json中讀取連線字串
-        private readonly string _connectString = System.Configuration.ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+        private readonly string _connectString="";
 
+        // 使用依賴注入從 appsettings.json 中取得連線字串
+        public SqlService(IConfiguration configuration)
+        {
+            _connectString = configuration.GetConnectionString("DefaultConnection");
+        }
         public T ReadOne<T>(string sql, object param = null)
         {
-            using (var connection = new SqlConnection(_connectString))
+            try
             {
-                connection.Open();
-                var result = connection.Query<T>(sql, param).ToList()[0]; // 只取第一筆資料
-                connection.Close();
-                return result;
+                return ReadMany<T>(sql, param)[0];
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
         public List<T> ReadMany<T>(string sql, object param = null)
         {
-            using (var connection = new SqlConnection(_connectString))
+            try
             {
-                connection.Open();
-                var result = connection.Query<T>(sql, param).ToList();
-                connection.Close();
-                return result;
+                using (var connection = new SqlConnection(_connectString))
+                {
+                    connection.Open();
+                    var result = connection.Query<T>(sql, param).ToList();
+                    connection.Close();
+
+                    if (result.Count == 0)
+                    {
+                        throw new Exception("資料不存在");
+                    }
+
+                    return result;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 
@@ -40,7 +58,7 @@ namespace YungchingDemo.Comm
                 {
                     try
                     {
-                        result= connection.Execute(sql, param, transaction);
+                        result = connection.Execute(sql, param, transaction);
                         transaction.Commit();
                     }
                     catch (Exception ex)
@@ -51,7 +69,7 @@ namespace YungchingDemo.Comm
                 }
                 connection.Close();
             }
-        
+
             return result;
         }
     }

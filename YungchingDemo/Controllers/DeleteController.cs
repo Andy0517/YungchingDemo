@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Dapper;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Data;
 using YungchingDemo.Comm;
 using YungchingDemo.Models;
 
@@ -9,17 +11,23 @@ namespace YungchingDemo.Controllers
     [Route("api/DeleteInformation")]
     public class DeleteController : ControllerBase
     {
+        private readonly SqlService _sqlService;
+        // 使用依賴注入將 SqlService 傳入
+        public DeleteController(SqlService sqlService)
+        {
+            _sqlService = sqlService;
+        }
         [HttpPost]
         public IActionResult POST([FromBody] QueryModel viewModel)
         {
-            // var sqlService = new SqlService();
-
-            string sql = $"SELECT * FROM [dbo].[Result] WHERE 1=1";
+            string sql = @"DELETE FROM T_ESTATE_Data WHERE ProjectID = @ProjectID";
 
             try
             {
+                var Params = new DynamicParameters();
+                Params.Add("@ProjectID", viewModel.ProjectID, DbType.AnsiString);
                 //執行SQL查詢，取得結果
-                //var result = sqlService.Execute(sql);
+                var result = _sqlService.Execute(sql, Params);
                 //將結果轉換為JSON格式
                 return new JsonResult(new { message = $"{viewModel.ProjectID}刪除成功！" });
             }

@@ -1,9 +1,13 @@
+using YungchingDemo.Comm;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 
 builder.Services.AddControllers(); //支援webapi controllers
+
+builder.Services.AddSingleton<SqlService>();
 
 var app = builder.Build();
 

@@ -2,7 +2,7 @@
 {
     public class QueryModel
     {
-        /// <summary> 專案案號 </summary>
+        /// <summary> 專案編號 </summary>
         public string ProjectID { get; set; }="";
     }
 }

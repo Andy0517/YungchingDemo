@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+﻿using Dapper;
+using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using YungchingDemo.Comm;
 using YungchingDemo.Models;
 
@@ -9,17 +10,34 @@ namespace YungchingDemo.Controllers
     [Route("api/InsertInformation")]
     public class InsertController : ControllerBase
     {
+        private readonly SqlService _sqlService;
+        // 使用依賴注入將 SqlService 傳入
+        public InsertController(SqlService sqlService)
+        {
+            _sqlService = sqlService;
+        }
         [HttpPost]
         public IActionResult POST([FromBody] ResultModel viewModel)
         {
-            // var sqlService = new SqlService();
-
-            string sql = $"SELECT * FROM [dbo].[Result] WHERE 1=1";
+            string sql = @"INSERT INTO T_ESTATE_Data
+                           (ProjectID ,ProjectName,Type,Address,Square,PublicRatio,Price,HaveSpace,Remark)
+                           VALUES (@ProjectID,@ProjectName,@Type,@Address,@Square,@PublicRatio,@Price,@HaveSpace,@Remark)";
 
             try
             {
+                var Params = new DynamicParameters();
+                //將參數加入到DynamicParameters中
+                Params.Add("@ProjectID", viewModel.ProjectID, DbType.AnsiString);
+                Params.Add("@ProjectName", viewModel.ProjectName, DbType.String);
+                Params.Add("@Type", viewModel.Type, DbType.AnsiString);
+                Params.Add("@Address", viewModel.Address, DbType.String);
+                Params.Add("@Square", viewModel.Square, DbType.Decimal);
+                Params.Add("@PublicRatio", viewModel.PublicRatio, DbType.Int32);
+                Params.Add("@Price", viewModel.Price, DbType.Int32);
+                Params.Add("@HaveSpace", viewModel.HaveSpace, DbType.AnsiString);
+                Params.Add("@Remark", viewModel.Remark, DbType.String);
                 //執行SQL查詢，取得結果
-                // var result = sqlService.Execute(sql);
+                var result = _sqlService.Execute(sql, Params);
                 //將結果轉換為JSON格式
                 return new JsonResult(new { message = $"{viewModel.ProjectID}新增成功！" });
             }
