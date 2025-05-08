@@ -7,6 +7,11 @@ namespace YungchingDemo.Comm
     {
         private readonly string _connectString="";
 
+        public SqlService(string connectString)
+        {
+            _connectString = connectString;
+        }
+
         // 使用依賴注入從 appsettings.json 中取得連線字串
         public SqlService(IConfiguration configuration)
         {

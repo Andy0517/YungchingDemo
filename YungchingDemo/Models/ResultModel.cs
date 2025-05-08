@@ -1,5 +1,10 @@
 ﻿namespace YungchingDemo.Models
 {
+    public class ComboBoxModel
+    {
+        public string CODEID { get; set; }
+        public string CODENAME { get; set; }
+    }
     public class ResultModel
     {
         /// <summary> 專案編號 </summary>
